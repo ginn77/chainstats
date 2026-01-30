@@ -4,52 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ChainStats</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .card {
-      background: #020617;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(0,255,255,.15);
-    }
-    h1 { color: #38bdf8; }
-    p { opacity: .8; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div class="card">
+  <header>
     <h1>ChainStats</h1>
-    <p>Modern Crypto Analytics Dashboard</p>
-    <p>🚀 GitHub Pages is working</p>
+    <input id="search" placeholder="Search token or pair (ETH, SOL, PEPE)">
+  </header>
 
-    <div id="price-box" style="margin-top:20px;font-size:18px;">
-      Loading BTC price...
-    </div>
-  </div>
+  <main>
+    <div id="token-info">Search a token…</div>
+    <div id="chart"></div>
+  </main>
 
-  <script>
-    async function loadPrice() {
-      const res = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_market_cap=true"
-      );
-      const data = await res.json();
-      document.getElementById("price-box").innerHTML =
-        `💰 BTC: $${data.bitcoin.usd.toLocaleString()}<br>
-         🧢 Market Cap: $${data.bitcoin.usd_market_cap.toLocaleString()}`;
-    }
-    loadPrice();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ChainStats</title>
+
   <style>
     body {
       margin: 0;
@@ -26,11 +27,29 @@
     p { opacity: .8; }
   </style>
 </head>
+
 <body>
   <div class="card">
     <h1>ChainStats</h1>
     <p>Modern Crypto Analytics Dashboard</p>
     <p>🚀 GitHub Pages is working</p>
+
+    <div id="price-box" style="margin-top:20px;font-size:18px;">
+      Loading BTC price...
+    </div>
   </div>
+
+  <script>
+    async function loadPrice() {
+      const res = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_market_cap=true"
+      );
+      const data = await res.json();
+      document.getElementById("price-box").innerHTML =
+        `💰 BTC: $${data.bitcoin.usd.toLocaleString()}<br>
+         🧢 Market Cap: $${data.bitcoin.usd_market_cap.toLocaleString()}`;
+    }
+    loadPrice();
+  </script>
 </body>
 </html>

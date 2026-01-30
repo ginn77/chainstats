@@ -18,6 +18,7 @@ search.addEventListener("keypress", async (e) => {
   }
 
   const p = data.pairs[0];
+  loadChart(p.baseToken.symbol + "USD");
 
   info.innerHTML = `
     <h2>${p.baseToken.symbol}/${p.quoteToken.symbol}</h2>
@@ -26,4 +27,8 @@ search.addEventListener("keypress", async (e) => {
     📊 Volume 24h: $${Number(p.volume.h24).toLocaleString()}
   `;
 });
+function loadChart(symbol) {
+  document.getElementById("tv-chart").src =
+    `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=15&theme=dark&style=1&locale=en`;
+}
 

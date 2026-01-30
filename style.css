@@ -1,0 +1,30 @@
+body {
+  margin: 0;
+  background: #0b1220;
+  color: #e5e7eb;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #020617;
+}
+
+input {
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+main {
+  padding: 16px;
+}
+
+#token-info {
+  margin-bottom: 20px;
+}

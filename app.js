@@ -1,3 +1,4 @@
+let currentChain = "ethereum";
 const search = document.getElementById("search");
 const info = document.getElementById("token-info");
 
@@ -8,8 +9,8 @@ search.addEventListener("keypress", async (e) => {
   const q = search.value;
 
   const res = await fetch(
-    `https://api.dexscreener.com/latest/dex/search/?q=${q}`
-  );
+  `https://api.dexscreener.com/latest/dex/search/?q=${q}&chainIds=${currentChain}`
+);
   const data = await res.json();
 
   if (!data.pairs || !data.pairs.length) {
@@ -33,8 +34,8 @@ function loadChart(symbol) {
 }
 async function loadTopGainers() {
   const res = await fetch(
-    "https://api.dexscreener.com/latest/dex/pairs/ethereum"
-  );
+  `https://api.dexscreener.com/latest/dex/pairs/${currentChain}`
+);
   const data = await res.json();
 
   const list = document.getElementById("gainers-list");
@@ -63,4 +64,8 @@ async function loadTopGainers() {
 }
 
 loadTopGainers();
+document.getElementById("chain").addEventListener("change", (e) => {
+  currentChain = e.target.value;
+  loadTopGainers();
+});
 

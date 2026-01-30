@@ -74,3 +74,10 @@ main {
 .up {
   color: #22c55e;
 }
+select {
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+}

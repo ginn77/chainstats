@@ -31,4 +31,36 @@ function loadChart(symbol) {
   document.getElementById("tv-chart").src =
     `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=15&theme=dark&style=1&locale=en`;
 }
+async function loadTopGainers() {
+  const res = await fetch(
+    "https://api.dexscreener.com/latest/dex/pairs/ethereum"
+  );
+  const data = await res.json();
+
+  const list = document.getElementById("gainers-list");
+  list.innerHTML = "";
+
+  data.pairs
+    .filter(p => p.volume?.h24 && p.priceChange?.h24)
+    .sort((a, b) => b.volume.h24 - a.volume.h24)
+    .slice(0, 8)
+    .forEach(p => {
+      const card = document.createElement("div");
+      card.className = "gainer-card";
+      card.innerHTML = `
+        <div class="sym">${p.baseToken.symbol}</div>
+        <div class="price">$${Number(p.priceUsd).toFixed(6)}</div>
+        <div class="up">▲ ${p.priceChange.h24}%</div>
+      `;
+      card.onclick = () => {
+        document.getElementById("search").value = p.baseToken.symbol;
+        document.getElementById("search").dispatchEvent(
+          new KeyboardEvent("keypress", { key: "Enter" })
+        );
+      };
+      list.appendChild(card);
+    });
+}
+
+loadTopGainers();
 

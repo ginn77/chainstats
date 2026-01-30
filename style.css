@@ -28,3 +28,13 @@ main {
 #token-info {
   margin-bottom: 20px;
 }
+#chart {
+  height: 420px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#tv-chart {
+  width: 100%;
+  height: 100%;
+}

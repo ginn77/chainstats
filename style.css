@@ -38,3 +38,39 @@ main {
   width: 100%;
   height: 100%;
 }
+#gainers h2 {
+  margin: 20px 0 12px;
+}
+
+#gainers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.gainer-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform .15s, border .15s;
+}
+
+.gainer-card:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+}
+
+.gainer-card .sym {
+  font-weight: bold;
+  color: #38bdf8;
+}
+
+.gainer-card .price {
+  margin-top: 6px;
+}
+
+.up {
+  color: #22c55e;
+}

@@ -1,91 +1,39 @@
-let currentChain = "ethereum";
+const searchInput = document.getElementById("search");
+const resultBox = document.getElementById("result");
 
-const search = document.getElementById("search");
-const info = document.getElementById("token-info");
-
-const chainMap = {
-  ethereum: "ethereum",
-  bsc: "bsc",
-  polygon: "polygon",
-  arbitrum: "arbitrum",
-  optimism: "optimism"
-};
-
-search.addEventListener("keydown", async (e) => {
-  if (e.key !== "Enter") return;
-
-  info.innerHTML = "Loading...";
-  const q = search.value;
+async function searchToken(symbol) {
+  resultBox.innerHTML = "Loading...";
 
   try {
     const res = await fetch(
-      `https://api.dexscreener.com/latest/dex/search/?q=${q}&chainIds=${chainMap[currentChain]}`
+      `https://api.coingecko.com/api/v3/search?query=${symbol}`
     );
     const data = await res.json();
 
-    if (!data.pairs?.length) {
-      info.innerHTML = "Token not found";
+    if (data.coins.length === 0) {
+      resultBox.innerHTML = "Token not found";
       return;
     }
 
-    const p = data.pairs
-      .sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0];
+    const coin = data.coins[0];
 
-    loadChart(`${p.chainId.toUpperCase()}:${p.baseToken.symbol}USD`);
-
-    info.innerHTML = `
-      <h2>${p.baseToken.symbol}/${p.quoteToken.symbol}</h2>
-      💰 Price: $${Number(p.priceUsd).toFixed(6)}<br>
-      💧 Liquidity: $${Number(p.liquidity?.usd || 0).toLocaleString()}<br>
-      📊 Volume 24h: $${Number(p.volume?.h24 || 0).toLocaleString()}
-    `;
-  } catch (err) {
-    info.innerHTML = "Error loading data";
-    console.error(err);
-  }
-});
-
-function loadChart(symbol) {
-  document.getElementById("tv-chart").src =
-    `https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=15&theme=dark`;
-}
-
-async function loadTopGainers() {
-  try {
-    const res = await fetch(
-      `https://api.dexscreener.com/latest/dex/pairs/${chainMap[currentChain]}`
+    const priceRes = await fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${coin.id}&vs_currencies=usd&include_market_cap=true`
     );
-    const data = await res.json();
+    const priceData = await priceRes.json();
 
-    const list = document.getElementById("gainers-list");
-    list.innerHTML = "";
-
-    data.pairs
-      .filter(p => p.volume?.h24 && p.priceChange?.h24)
-      .sort((a, b) => b.volume.h24 - a.volume.h24)
-      .slice(0, 8)
-      .forEach(p => {
-        const card = document.createElement("div");
-        card.className = "gainer-card";
-        card.innerHTML = `
-          <div class="sym">${p.baseToken.symbol}</div>
-          <div class="price">$${Number(p.priceUsd).toFixed(6)}</div>
-          <div class="up">▲ ${(p.priceChange.h24).toFixed(2)}%</div>
-        `;
-        card.onclick = () => {
-          search.value = p.baseToken.symbol;
-          search.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
-        };
-        list.appendChild(card);
-      });
+    resultBox.innerHTML = `
+      <h3>${coin.name} (${coin.symbol.toUpperCase()})</h3>
+      <p>💰 Price: $${priceData[coin.id].usd}</p>
+      <p>🏦 Market Cap: $${priceData[coin.id].usd_market_cap.toLocaleString()}</p>
+    `;
   } catch (e) {
-    console.error(e);
+    resultBox.innerHTML = "Error loading data";
   }
 }
 
-loadTopGainers();
-
-document.getElementById("chain").addEventListener("change", e => {
-  currentChain = e.target.value;
-  loadTopGainers();
+searchInput.addEventListener("keyup", (e) => {
+  if (e.key === "Enter") {
+    searchToken(e.target.value);
+  }
 });
